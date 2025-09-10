@@ -35,7 +35,7 @@ app.post("/ask", async (req, res) => {
     const response = await openai.responses.create({
       model: "gpt-4.1",          // ✅ browsing-capable
       input: userText,
-      tools: [{ type: "web" }],  // ✅ allow internet search
+      tools: [{ type: "web_search_preview_2025_03_11" }],  // ✅ allow internet search
     });
 
     // Extract AI reply text safely

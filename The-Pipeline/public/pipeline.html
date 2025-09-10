@@ -1,3 +1,5 @@
+<!--basic HTML -->
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,14 +10,16 @@
 <body>
   <h2>🎤 Voice Chat Pipeline</h2>
 
+<!-- enter key and region -->
   <div>
     <label>Speech Key: <input id="speechKey" type="text" placeholder="Enter Azure Speech Key"></label><br>
     <label>Region: <input id="speechRegion" type="text" placeholder="Enter Azure Region (e.g. eastus)"></label><br>
-    <button id="init">Initialize</button>
+    <button id="init">Initialize</button> <!--  click once keys are entered -->
   </div>
 
   <hr>
 
+  <!-- button for speaking ¦ transccript from person and AI -->
   <button id="start" disabled>Start Talking</button>
   <div id="transcript"></div>
   <div id="reply"></div>
@@ -29,7 +33,8 @@
     initBtn.onclick = () => {
       const key = document.getElementById("speechKey").value.trim();
       const region = document.getElementById("speechRegion").value.trim();
-
+      
+      // check if key and region are entered
       if (!key || !region) {
         alert("Please enter both Speech Key and Region!");
         return;
@@ -115,4 +120,3 @@
   </script>
 </body>
 </html>
-<!-- --- IGNORE --- -->
