@@ -344,8 +344,11 @@
             }
 
             addToConversation(role, message) {
-                this.conversationHistory.push({ role, content: message });
+                // Add to conversation history for OpenAI API (correct format)
+                const apiRole = role === 'ai' ? 'assistant' : 'user';
+                this.conversationHistory.push({ role: apiRole, content: message });
 
+                // Add to UI display
                 const messageDiv = document.createElement('div');
                 messageDiv.className = `message ${role}-message`;
                 messageDiv.innerHTML = `<strong>${role === 'user' ? 'You' : 'AI'}:</strong> ${message}`;
