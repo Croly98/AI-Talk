@@ -1,0 +1,30 @@
+I've created a professional unified pipeline (pipeline.html) that
+  combines STT - OpenAI - TTS in a single interface:
+
+  Key Features:
+  - One-button operation: Single "Talk to AI" button handles the entire
+  flow
+  - Professional UI: Clean, modern design with gradient background
+  - Real-time status: Visual feedback for listening/processing/speaking
+  states
+  - Conversation history: Shows the dialogue between you and AI
+  - Simple configuration: Enter your Azure Speech and OpenAI keys once
+
+  How it works:
+  1. Click "Talk to AI" button
+  2. Speak your question (status shows "Listening...")
+  3. AI processes your speech and generates response (status shows "AI is
+  thinking...")
+  4. AI response is spoken back to you (status shows "Speaking...")
+  5. Conversation appears in the history panel
+  6. Button re-enables for next interaction
+
+  To use:
+  1. Fill in your Azure Speech Services key and region
+  2. Add your OpenAI API key
+  3. Open in a local server (e.g. Live Server in VS Code)
+  4. Click the talk button and speak
+
+  The pipeline maintains conversation context and uses GPT-3.5-turbo for
+  fast responses. The interface handles errors gracefully and provides
+  clear status updates throughout the process.
