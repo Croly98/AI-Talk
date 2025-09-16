@@ -1,0 +1,122 @@
+<!--basic HTML -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>STT → LLM → TTS</title>
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+</head>
+<body>
+  <h2>🎤 Voice Chat Pipeline</h2>
+
+<!-- enter key and region -->
+  <div>
+    <label>Speech Key: <input id="speechKey" type="text" placeholder="Enter Azure Speech Key"></label><br>
+    <label>Region: <input id="speechRegion" type="text" placeholder="Enter Azure Region (e.g. eastus)"></label><br>
+    <button id="init">Initialize</button> <!--  click once keys are entered -->
+  </div>
+
+  <hr>
+
+  <!-- button for speaking ¦ transccript from person and AI -->
+  <button id="start" disabled>Start Talking</button>
+  <div id="transcript"></div>
+  <div id="reply"></div>
+
+  <script>
+    let speechConfig, recognizer;
+
+    const startBtn = document.getElementById("start");
+    const initBtn = document.getElementById("init");
+
+    initBtn.onclick = () => {
+      const key = document.getElementById("speechKey").value.trim();
+      const region = document.getElementById("speechRegion").value.trim();
+      
+      // check if key and region are entered
+      if (!key || !region) {
+        alert("Please enter both Speech Key and Region!");
+        return;
+      }
+
+      // Create config with user-provided values
+      speechConfig = SpeechSDK.SpeechConfig.fromSubscription(key, region);
+      speechConfig.speechRecognitionLanguage = "en-US";
+      speechConfig.speechSynthesisVoiceName = "en-US-JennyNeural";
+
+      const audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+      recognizer = new SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
+
+      startBtn.disabled = false; // enable button after initialization
+      alert("✅ Speech service initialized! You can now start talking.");
+    };
+
+    startBtn.onclick = () => {
+      startBtn.disabled = true;
+      startBtn.innerText = "Listening...";
+
+      recognizer.recognizeOnceAsync(async result => {
+        const text = result.text;
+
+        if (!text || text.trim() === "") {
+          document.getElementById("transcript").innerText = "❌ No speech detected.";
+          startBtn.disabled = false;
+          startBtn.innerText = "Start Talking";
+          return;
+        }
+
+        document.getElementById("transcript").innerText = "You: " + text;
+
+        try {
+          // Send to backend → LLM
+          const response = await fetch("/ask", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text })
+          });
+
+          const data = await response.json();
+          const reply = data.reply;
+
+          if (!reply) {
+            document.getElementById("reply").innerText = "AI: ❌ No reply received.";
+            startBtn.disabled = false;
+            startBtn.innerText = "Start Talking";
+            return;
+          }
+
+          document.getElementById("reply").innerText = "AI: " + reply;
+
+          // Speak it
+          const synth = new SpeechSDK.SpeechSynthesizer(
+            speechConfig,
+            SpeechSDK.AudioConfig.fromDefaultSpeakerOutput()
+          );
+
+          synth.speakTextAsync(
+            reply,
+            () => {
+              synth.close();
+              startBtn.disabled = false;
+              startBtn.innerText = "Start Talking";
+            },
+            err => {
+              console.error("Speech synthesis error:", err);
+              synth.close();
+              startBtn.disabled = false;
+              startBtn.innerText = "Start Talking";
+            }
+          );
+
+        } catch (err) {
+          console.error("Pipeline error:", err);
+          document.getElementById("reply").innerText = "AI: ❌ Pipeline failed.";
+          startBtn.disabled = false;
+          startBtn.innerText = "Start Talking";
+        }
+      });
+    };
+  </script>
+</body>
+</html>
