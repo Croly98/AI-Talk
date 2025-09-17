@@ -26,5 +26,5 @@ I've created a professional unified pipeline (pipeline.html) that
   4. Click the talk button and speak
 
   The pipeline maintains conversation context and uses GPT-3.5-turbo for
-  fast responses. The interface handles errors gracefully and provides
+  fast responses. The interface handles errors and provides
   clear status updates throughout the process.

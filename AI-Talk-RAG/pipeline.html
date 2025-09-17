@@ -42,6 +42,13 @@ This is a voice-to-AI conversation app that:
             font-size: 2.5em;
         }
 
+         h5 {
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 300;
+            font-size: 1.5em;
+        }
+
         .config-section {
             background: #f8f9fa;
             padding: 20px;
@@ -147,7 +154,8 @@ This is a voice-to-AI conversation app that:
 <body>
  <!--Main text + User key input--> 
 <div class="container">
-    <h1>AI Talk Pipeline GPT-3.5-turbo + Pinecone RAG</h1> 
+    <h1>AI Talk Pipeline Pinecone RAG</h1>
+    <h5>The AI Ice cream vendor!</h5> 
 
     <div class="config-section">
         <div class="config-row">
@@ -174,7 +182,7 @@ This is a voice-to-AI conversation app that:
 
     <button id="talkButton">🎤 Talk to AI</button>
 
-    <div id="status" class="status ready">Ready - Click to start talking</div>
+    <div id="status" class="status ready">Ready - Click to order ice cream🍦</div>
 
     <div id="conversation" class="conversation" style="display: none;">
         <div id="conversationHistory"></div>
@@ -209,7 +217,7 @@ class AIPipeline {
         this.talkButton.addEventListener('click', () => this.startConversation());
         if (!!window.SpeechSDK) {
             this.SpeechSDK = window.SpeechSDK;
-            this.updateStatus('Ready - Click to start talking', 'ready');
+            this.updateStatus('Ready - Click to order ice cream🍦', 'ready');
         } else {
             this.updateStatus('Speech SDK not loaded', 'error');
         }
