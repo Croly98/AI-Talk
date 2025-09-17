@@ -147,7 +147,7 @@ This is a voice-to-AI conversation app that:
 <body>
     <!--Main text + User key input--> 
     <div class="container">
-        <h1>AI Talk Pipeline GPT-3.5-turbo</h1>
+        <h1>AI Talk Pipeline GPT-3.5-turbo</h1> 
 
         <div class="config-section">
             <div class="config-row">
@@ -184,13 +184,18 @@ This is a voice-to-AI conversation app that:
         */
 
         class AIPipeline {
-            constructor() {
-                // Prevent multiple conversations from running at once
+            //run automatically when an instant is created
+            constructor() { 
+
+                // Prevent multiple conversations (acts as a flag to indicate whether a conversation is currently in progress)
                 this.isProcessing = false;
-                // Store conversation for context (so AI remembers what we talked about)
+
+                // Creates conversationHistory as an empty array on the instance, Store conversation for context (so AI remembers what we talked about)
                 this.conversationHistory = [];
-                // Get references to HTML elements
+
+                // Get references to HTML elements (query the DOM for elements we need to control, connected with DOMContentLoaded)
                 this.initializeElements();
+
                 // Set up button clicks and speech SDK
                 this.bindEvents();
             }
@@ -201,12 +206,14 @@ This is a voice-to-AI conversation app that:
                 this.statusDiv = document.getElementById('status');               // Shows current status (listening, thinking, etc.)
                 this.conversationDiv = document.getElementById('conversation');   // Container for conversation history
                 this.historyDiv = document.getElementById('conversationHistory'); // The actual conversation messages
+                
                 this.speechKeyInput = document.getElementById('speechKey');       // Azure Speech API key input
                 this.speechRegionInput = document.getElementById('speechRegion'); // Azure region input
                 this.openaiKeyInput = document.getElementById('openaiKey');       // OpenAI API key input
             }
 
             bindEvents() {
+                // talkbutton = 
                 this.talkButton.addEventListener('click', () => this.startConversation());
 
                 if (!!window.SpeechSDK) {
