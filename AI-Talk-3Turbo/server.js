@@ -1,9 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
+import cors from "cors";
 import OpenAI from "openai";
 import { Pinecone } from "@pinecone-database/pinecone";
+import 'dotenv/config';
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 app.post("/query", async (req, res) => {
@@ -15,7 +18,8 @@ app.post("/query", async (req, res) => {
 
     // Initialize Pinecone client dynamically
     const pc = new Pinecone({ apiKey: pineconeKey });
-    const index = pc.index(indexName);
+    const PINECONE_HOST = process.env.PINECONE_HOST;
+    const index = pc.index(indexName, PINECONE_HOST);
 
     // 1. Embed user query
     const embedding = await openai.embeddings.create({
@@ -30,7 +34,10 @@ app.post("/query", async (req, res) => {
       includeMetadata: true
     });
 
-    const context = results.matches.map(r => r.metadata.text).join("\n");
+    console.log("Pinecone results:", results.matches.length, "matches found");
+    console.log("Retrieved context:", results.matches.map(r => r.metadata?.text));
+
+    const context = results.matches.map(r => r.metadata?.text || "").filter(t => t).join("\n");
 
     // 3. Build prompt with retrieved context
     const completion = await openai.chat.completions.create({
@@ -38,7 +45,7 @@ app.post("/query", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "You are a helpful AI assistant. Keep your responses conversational and concise, suitable for speech synthesis. Use the provided context if relevant."
+          content: "You are a helpful AI assistant who works at an ice cream shop. Keep your responses conversational and concise, suitable for speech synthesis. Use the provided context if relevant."
         },
         {
           role: "user",

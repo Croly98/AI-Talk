@@ -25,11 +25,11 @@ const index = pc.index(INDEX_NAME, PINECONE_HOST);
 
 // Knowledge base
 const flavours = [
-  "Vanilla is a classic flavour, smooth and creamy.",
-  "Chocolate ice cream is rich and sweet, made from cocoa.",
-  "Strawberry ice cream has a fruity taste, usually pink in colour.",
-  "Mint chocolate chip is green, flavoured with mint and chocolate chips.",
-  "Cookies and cream is made with chunks of chocolate cookies in vanilla ice cream."
+  "We sell Vanilla ice cream. classic flavour, smooth and creamy.",
+  "We sell Chocolate ice cream. is rich and sweet, made from cocoa.",
+  "We sell Strawberry ice cream. has a fruity taste, usually pink in colour.",
+  "We sell Mint chocolate chip ice cream. it is green, flavoured with mint and chocolate chips.",
+  "We sell Cookies and cream ice cream. it is made with chunks of oreo in vanilla ice cream."
 ];
 
 async function ingestData() {

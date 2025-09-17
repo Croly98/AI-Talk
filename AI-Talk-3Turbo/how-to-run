@@ -1,0 +1,3 @@
+run flavours.js
+run server.js
+open pipeline.html in live server
