@@ -213,9 +213,13 @@ This is a voice-to-AI conversation app that:
             }
 
             bindEvents() {
-                // talkbutton = 
+                // talkbutton = reference to the button element set earlier in initializeElements
+                // addEventListener = method that attaches an event handler to the button
+                // startConversation = method that starts the voice-to-AI conversation (AIpipeline)
                 this.talkButton.addEventListener('click', () => this.startConversation());
 
+                // !! = forces a boolean conversion, checks if SpeechSDK is loaded
+                // window.SpeechSDK = global object provided by the Azure Speech SDK script we loaded earlier
                 if (!!window.SpeechSDK) {
                     this.SpeechSDK = window.SpeechSDK;
                     this.updateStatus('Ready - Click to start talking', 'ready');
@@ -223,7 +227,8 @@ This is a voice-to-AI conversation app that:
                     this.updateStatus('Speech SDK not loaded', 'error');
                 }
             }
-
+            // this.statusDiv = reference to the <div id="status">
+            // .textContent = message = replaces whatever text was there with the new status message (e.g., “Listening
             updateStatus(message, type) {
                 this.statusDiv.textContent = message;
                 this.statusDiv.className = `status ${type}`;
@@ -236,10 +241,10 @@ This is a voice-to-AI conversation app that:
             }
 
             /* === THE MAIN CONVERSATION PIPELINE ===
-               This is where the magic happens! Three steps:
-               1. Listen to your voice - convert to text
+               Three steps:
+               1. Listen to my voice - converts to text
                2. Send text to OpenAI - get AI response
-               3. Convert AI response to speech → speak it out loud */
+               3. Convert AI response to speech - speak it out loud */
             async startConversation() {
                 // Don't start if we're already processing
                 if (this.isProcessing) return;
@@ -279,6 +284,7 @@ This is a voice-to-AI conversation app that:
                             await this.textToSpeech(aiResponse);
                         }
                     }
+                /* Error handling to catch any issues during the process */
                 } catch (error) {
                     console.error('Pipeline error:', error);
                     this.updateStatus('Error occurred: ' + error.message, 'error');
@@ -288,7 +294,8 @@ This is a voice-to-AI conversation app that:
                     this.updateStatus('Ready - Click to start talking', 'ready');
                 }
             }
-
+            /* === CONFIG VALIDATION ===
+               Make sure user entered all required API keys */
             validateConfig() {
                 return this.speechKeyInput.value.trim() &&
                        this.speechRegionInput.value.trim() &&
@@ -304,14 +311,16 @@ This is a voice-to-AI conversation app that:
                         this.speechKeyInput.value.trim(),
                         this.speechRegionInput.value.trim()
                     );
-                    // Set language to English (US)
+                    // Set language to English (US) might change to uk/ire later
                     speechConfig.speechRecognitionLanguage = "en-US";
 
-                    // Configure to use the default microphone
+                    // Configure to use the default microphone (might add choice of mic later)
                     const audioConfig = this.SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
-                    // Create the speech recognizer
+                    // Create the speech recognizer (dont understand what I wrote here)
                     const recognizer = new this.SpeechSDK.SpeechRecognizer(speechConfig, audioConfig);
 
+                    // Start recognizing speech (listening for a word/sentence) using Azure Speech SDK
+                    // recognizeOnceAsync listens to my mic, waits for me to say something, processes it, and then stops automatically (no VAD needed)
                     recognizer.recognizeOnceAsync(
                         (result) => {
                             recognizer.close();
@@ -347,21 +356,22 @@ This is a voice-to-AI conversation app that:
                                     role: 'system',  // System prompt - tells AI how to behave
                                     content: 'You are a helpful AI assistant. Keep your responses conversational and concise, suitable for speech synthesis. You have access to real-time information and can browse the internet.'
                                 },
-                                ...this.conversationHistory.slice(-10), // Include last 10 messages for context
+                                ...this.conversationHistory.slice(-10), // Include last 10 messages for context (can adjust)
                                 {
                                     role: 'user',   // The current user message
                                     content: userMessage
                                 }
                             ],
                            max_tokens: 150,    // Limit response length (good for QUICK speech)
-                            temperature: 0.7    // How creative/random the responses are (0.7 is balanced)
+                            temperature: 0.7    // How creative/random the responses are (0.7 is the best I think)
                         })
                     });
 
+                    // Check for HTTP errors
                     if (!response.ok) {
                         throw new Error(`OpenAI API error: ${response.status}`);
                     }
-
+                    // Parse the JSON response
                     const data = await response.json();
                     return data.choices[0].message.content;
                 } catch (error) {
@@ -383,7 +393,7 @@ This is a voice-to-AI conversation app that:
                     const synthesizer = new this.SpeechSDK.SpeechSynthesizer(speechConfig);
 
                     synthesizer.speakTextAsync(
-                        text,
+                        text, // the string to speak
                         (result) => {
                             synthesizer.close();
                             if (result.reason === this.SpeechSDK.ResultReason.SynthesizingAudioCompleted) {
@@ -400,7 +410,7 @@ This is a voice-to-AI conversation app that:
                 });
             }
 
-            /* === ADD MESSAGE TO CONVERSATION ===
+            /* === ADD MESSAGE TO CONVERSATION === (this part was majority written by Claude)
                Stores messages for AI context AND displays them on screen */
             addToConversation(role, message) {
                 // Store in conversation history for OpenAI (so AI remembers context)
