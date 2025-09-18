@@ -64,7 +64,8 @@ A complete RAG implementation featuring:
    - Generate an API key from your OpenAI dashboard
 
 3. **Pinecone (for RAG implementation)**
-   - Create a Pinecone account 
+   - Create a Pinecone account
+      - Name: my-knowledge-base
       - Metric: Cosine
       - Dimentions: 3072
       - Cloud: AWS
