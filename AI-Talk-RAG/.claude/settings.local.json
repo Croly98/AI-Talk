@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//c/Users/Zeus-User/Desktop/AI/AI-Talk-Turbo/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

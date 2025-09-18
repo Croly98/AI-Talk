@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<!-- 🍦🍨 in case I need them again
-=== AI TALK PIPELINE EXPLANATION ===
-This is a voice-to-AI conversation app that:
-1. Enter in the API keys for GPT and Azure Speech Services
-1. Listens to your voice (Speech-to-Text using Azure)
-2. Sends what you said to OpenAI GPT-3.5-turbo for a response
-3. Speaks the AI's response back to you (Text-to-Speech using Azure)
+<!-- 🍦🍨 RAG Ice Cream Vendor Pipeline
+=== AI TALK RAG PIPELINE EXPLANATION ===
+This is a voice-to-AI conversation app with RAG (Retrieval-Augmented Generation) that:
+1. Enter API keys for OpenAI, Azure Speech Services, and Pinecone
+2. Listens to your voice (Speech-to-Text using Azure)
+3. Converts your question into a vector embedding (OpenAI text-embedding-3-large)
+4. Searches Pinecone vector database for relevant ice cream knowledge
+5. Combines retrieved context with your question and sends to GPT-3.5-turbo
+6. Speaks the AI's contextual response back to you (Text-to-Speech using Azure)
+
+=== RAG WORKFLOW BREAKDOWN ===
+1. VOICE INPUT: Azure Speech SDK captures and transcribes your voice
+2. EMBEDDING: OpenAI creates vector representation of your question
+3. RETRIEVAL: Pinecone searches for similar vectors in knowledge base
+4. AUGMENTATION: Retrieved context is added to your original question
+5. GENERATION: GPT-3.5-turbo generates response using context + question
+6. VOICE OUTPUT: Azure Speech SDK speaks the response
+
+=== KEY FILES ===
+- pipeline.html: Frontend interface and voice pipeline logic
+- server.js: Backend API that handles RAG process (/query endpoint)
+- flavours.js: Script to populate Pinecone with ice cream knowledge base
 -->
 <html lang="en">
 <head>
@@ -293,22 +308,30 @@ class AIPipeline {
         });
     }
 
+    /* === RAG API CALL ===
+       Instead of calling OpenAI directly, we call our local server that handles the RAG process:
+       1. Server embeds the user question using OpenAI
+       2. Server searches Pinecone for relevant ice cream knowledge
+       3. Server combines retrieved context with user question
+       4. Server sends enhanced prompt to GPT-3.5-turbo
+       5. Server returns the contextually-aware response */
     async callOpenAI(userMessage) {
         try {
+            // Call our local RAG server instead of OpenAI directly
             const response = await fetch('http://localhost:3000/query', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    query: userMessage,
-                    openaiKey: this.openaiKeyInput.value.trim(),
-                    pineconeKey: this.pineconeKeyInput.value.trim(),
-                    indexName: this.pineconeIndexInput.value.trim()
+                body: JSON.stringify({
+                    query: userMessage,                                    // User's spoken question
+                    openaiKey: this.openaiKeyInput.value.trim(),          // For embeddings and chat completion
+                    pineconeKey: this.pineconeKeyInput.value.trim(),      // For vector database access
+                    indexName: this.pineconeIndexInput.value.trim()       // Pinecone index containing ice cream data
                 })
             });
 
             if (!response.ok) throw new Error(`Backend error: ${response.status}`);
             const data = await response.json();
-            return data.answer;
+            return data.answer;  // Contains GPT response enhanced with retrieved knowledge
         } catch (error) {
             throw new Error('RAG request failed: ' + error.message);
         }
