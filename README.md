@@ -38,7 +38,7 @@ Four different implementations showcasing various AI models:
 
 - **AI-Talk-GPT4o**: Premium conversational experience with GPT-4o
 - **AI-Talk-Turbo**: Fast conversations with GPT-3.5-Turbo
-- **AI-Talk-M7B**: Alternative using Microsoft's 7B model
+- **AI-Talk-M7B**: Alternative using Microsoft's 7B model (fastest model)
 - **AI-Talk-RAG**: Context-enhanced conversations with vector database
 
 ### 2. RAG (Retrieval-Augmented Generation) System
@@ -282,6 +282,12 @@ This project is intended for educational and demonstration purposes. Please ensu
 - [OpenAI API Documentation](https://platform.openai.com/docs)
 - [Pinecone Documentation](https://docs.pinecone.io/)
 - [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Speech_API)
+
+## 👨‍💻 Author
+
+**Josh Croly**
+- 📧 Email: jcroly1998@gmail.com
+- 💼 LinkedIn: [linkedin.com/in/JoshCroly](https://linkedin.com/in/JoshCroly)
 
 ---
 
