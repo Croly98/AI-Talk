@@ -64,7 +64,13 @@ A complete RAG implementation featuring:
    - Generate an API key from your OpenAI dashboard
 
 3. **Pinecone (for RAG implementation)**
-   - Create a Pinecone account
+   - Create a Pinecone account 
+      - Metric: Cosine
+      - Dimentions: 3072
+      - Cloud: AWS
+      - Region: us-east-1
+      - Type: Dense
+      - Capacity Mode: Serverless
    - Set up a vector database index
    - Note your API key and index details
 
