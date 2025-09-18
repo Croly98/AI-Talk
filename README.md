@@ -65,7 +65,7 @@ A complete RAG implementation featuring:
 
 3. **Pinecone (for RAG implementation)**
    - Create a Pinecone account
-   - Set up a vector database index
+   - Set up a vector database index (my set-up below)
       - Name: my-knowledge-base
       - Metric: Cosine
       - Dimentions: 3072
