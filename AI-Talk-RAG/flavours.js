@@ -1,6 +1,6 @@
 /* === ICE CREAM KNOWLEDGE BASE INGESTION ===
    This script populates the Pinecone vector database with ice cream knowledge.
-   It's the "R" (Retrieval) part of RAG - without this data, the AI would have no
+   Retrieval part of RAG - without this data, the AI would have no
    specific ice cream knowledge to retrieve and would give generic responses.
 
    PROCESS:

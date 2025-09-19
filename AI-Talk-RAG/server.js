@@ -2,7 +2,7 @@
    This server implements the RAG (Retrieval-Augmented Generation) backend:
    - Receives user queries from the frontend
    - Embeds queries using OpenAI text-embedding-3-large
-   - Searches Pinecone vector database for relevant ice cream knowledge
+   - Searches Pinecone vector database for relevant ice cream knowledge (LOL)
    - Combines retrieved context with user query for GPT-3.5-turbo
    - Returns enhanced AI responses with specific ice cream information
 */
@@ -19,7 +19,7 @@ app.use(cors());                    // Allow frontend to call our API
 app.use(bodyParser.json());         // Parse JSON request bodies
 
 /* === RAG QUERY ENDPOINT ===
-   This is where the magic happens! The /query endpoint implements the full RAG pipeline:
+      The /query endpoint implements the full RAG pipeline:
    1. EMBED: Convert user question to vector using OpenAI
    2. RETRIEVE: Search Pinecone for similar vectors (ice cream knowledge)
    3. AUGMENT: Combine retrieved context with user question
