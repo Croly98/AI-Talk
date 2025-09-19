@@ -62,9 +62,9 @@ async function ingestData() {
 
       // === STEP 2: STORE IN PINECONE VECTOR DATABASE ===
       // Save the vector along with original text as metadata
-      await index.upsert([
+      await index.upsert([ //the pinecone index method to add vectors to the index
         {
-          id: `flavour-${i}`,                          // Unique identifier
+          id: `flavour-${i}`,                          // Unique identifier, i is a variable
           values: embedding.data[0].embedding,         // The vector representation
           metadata: { text }                           // Original text for retrieval
         }
