@@ -296,6 +296,8 @@ This project is intended for educational and demonstration purposes. Please ensu
 - 📧 Email: jcroly1998@gmail.com
 - 💼 LinkedIn: [linkedin.com/in/JoshCroly](https://linkedin.com/in/JoshCroly)
 
+- 📖 READ.ME written by CLAUDE
+
 ---
 
 **Built with ❤️ to showcase the incredible possibilities when Azure AI meets OpenAI technology**
